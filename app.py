@@ -100,7 +100,7 @@ col_izq, col_centro, col_der = st.columns([1, 2, 1])
 
 # --- Columna Izquierda ---
 with col_izq:
-    if os.path.exists("titanic_inicio.jpg"):
+    if os.path.exists("Titanic.jpg"):
         st.image("titanic_inicio.jpg", caption="Southampton, 1912", use_container_width=True)
     else:
         # Fallback en caso de que no hayas subido la imagen aún
@@ -108,7 +108,7 @@ with col_izq:
 
 # --- Columna Derecha ---
 with col_der:
-    if os.path.exists("titanic_final.jpg"):
+    if os.path.exists("Titanic.jpg"):
         st.image("titanic_final.jpg", caption="El Destino Final", use_container_width=True)
     else:
         st.info("📷 Sube 'titanic_final.jpg' a tu repo")
