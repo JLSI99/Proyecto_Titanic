@@ -9,13 +9,13 @@ import os
 st.set_page_config(page_title="Titanic Simulation", layout="wide")
 
 # ==========================================
-# 2. CSS PERSONALIZADO (Estilo Dark & Moderno)
+# 2. CSS PERSONALIZADO (Estilo Dark, Moderno y Centrado)
 # ==========================================
 st.markdown("""
     <style>
     .stApp { background-color: #0e1117; }
     
-    /* Centrado de la columna central y sus elementos */
+    /* Centrado de la columna central */
     [data-testid="stColumn"]:nth-of-type(2) {
         display: flex;
         flex-direction: column;
@@ -35,10 +35,28 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
+    /* Centrar estrictamente los Inputs, Selectores y Sliders */
+    div[data-testid="stTextInput"], 
+    div[data-testid="stSelectbox"], 
+    div[data-testid="stRadio"], 
+    div[data-testid="stSlider"], 
+    div[data-testid="stNumberInput"] {
+        width: 100% !important;
+        max-width: 450px !important;
+        margin: 0 auto !important; /* Esto fuerza el centrado horizontal */
+    }
+
+    /* Centrar el contenedor padre del botón */
+    div[data-testid="stButton"] {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin-top: 15px !important;
+    }
+
     /* Botón Siguiente: Grande y centrado */
     .stButton > button {
         display: block;
-        margin: 20px auto !important;
         width: 100% !important;
         max-width: 280px;
         height: 3.5em;
@@ -54,12 +72,6 @@ st.markdown("""
     .stButton > button:hover {
         background-color: #357ABD !important;
         transform: scale(1.02);
-    }
-
-    /* Inputs y Sliders */
-    .stTextInput, .stSelectbox, .stSlider, .stRadio {
-        width: 100% !important;
-        max-width: 450px;
     }
 
     h1 { text-align: center; color: white !important; padding-bottom: 20px; }
@@ -101,17 +113,17 @@ col_izq, col_centro, col_der = st.columns([1, 2, 1])
 # --- Columna Izquierda ---
 with col_izq:
     if os.path.exists("Titanic.jpg"):
-        st.image("Titanic.jpg", caption="Southampton, 1912", use_container_width=True)
+        st.image("Titanic.jpg", caption="Titanic, 1912", use_container_width=True)
     else:
         # Fallback en caso de que no hayas subido la imagen aún
-        st.info("📷 Sube 'titanic_inicio.jpg' a tu repo")
+        st.info("📷 Sube 'Titanic.jpg' a tu repo")
 
 # --- Columna Derecha ---
 with col_der:
     if os.path.exists("Iceberg.jpeg"):
         st.image("Iceberg.jpeg", caption="El Destino Final", use_container_width=True)
     else:
-        st.info("📷 Sube 'titanic_final.jpg' a tu repo")
+        st.info("📷 Sube 'Iceberg.jpeg' a tu repo")
 
 # --- Columna Central (Lógica de la App) ---
 with col_centro:
