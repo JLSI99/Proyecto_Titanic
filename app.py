@@ -45,7 +45,7 @@ if 'paso' not in st.session_state:
     st.session_state.datos = {}
 
 # 5. Diseño: Imágenes laterales y contenido central
-st.markdown("<h1 style='text-align: center;'>🚢 Pipeline de Datos: Supervivencia Titanic</h1>", unsafe_allow_stdio=True)
+st.markdown("<h1 style='text-align: center;'>🚢 Pipeline de Datos: Supervivencia Titanic</h1>", unsafe_allow_html=True)
 
 col_img_1, col_content, col_img_2 = st.columns([1, 2, 1])
 
