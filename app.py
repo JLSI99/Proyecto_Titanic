@@ -9,7 +9,7 @@ import os
 st.set_page_config(page_title="Titanic Simulation", layout="wide")
 
 # ==========================================
-# 2. CSS PERSONALIZADO (Estilo Dark, Moderno y Centrado)
+# 2. CSS PERSONALIZADO (Estilo Dark, Moderno y Centrado Absoluto)
 # ==========================================
 st.markdown("""
     <style>
@@ -35,7 +35,7 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* Centrar estrictamente los Inputs, Selectores y Sliders */
+    /* Centrar estrictamente los contenedores principales */
     div[data-testid="stTextInput"], 
     div[data-testid="stSelectbox"], 
     div[data-testid="stRadio"], 
@@ -43,20 +43,26 @@ st.markdown("""
     div[data-testid="stNumberInput"] {
         width: 100% !important;
         max-width: 450px !important;
-        margin: 0 auto !important; /* Esto fuerza el centrado horizontal */
+        margin: 0 auto !important; 
     }
 
-    /* Centrar el contenedor padre del botón */
-    div[data-testid="stButton"] {
+    /* 🔥 NUEVO: Centrar internamente las opciones del Radio Button (Género) */
+    div[role="radiogroup"] {
+        justify-content: center !important;
+    }
+
+    /* 🔥 NUEVO: Contenedor global de botones para centrado absoluto */
+    .stButton {
         display: flex !important;
         justify-content: center !important;
         width: 100% !important;
         margin-top: 15px !important;
     }
 
-    /* Botón Siguiente: Grande y centrado */
+    /* Botones: Siguiente, Calcular Destino, Reiniciar */
     .stButton > button {
         display: block;
+        margin: 0 auto !important; /* Fuerza el centrado del botón en sí */
         width: 100% !important;
         max-width: 280px;
         height: 3.5em;
@@ -115,7 +121,6 @@ with col_izq:
     if os.path.exists("Titanic.jpg"):
         st.image("Titanic.jpg", caption="Titanic, 1912", use_container_width=True)
     else:
-        # Fallback en caso de que no hayas subido la imagen aún
         st.info("📷 Sube 'Titanic.jpg' a tu repo")
 
 # --- Columna Derecha ---
