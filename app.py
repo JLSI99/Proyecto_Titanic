@@ -35,10 +35,9 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* Centrar estrictamente los contenedores principales */
+    /* Centrar estrictamente los contenedores principales de inputs */
     div[data-testid="stTextInput"], 
     div[data-testid="stSelectbox"], 
-    div[data-testid="stRadio"], 
     div[data-testid="stSlider"], 
     div[data-testid="stNumberInput"] {
         width: 100% !important;
@@ -46,38 +45,50 @@ st.markdown("""
         margin: 0 auto !important; 
     }
 
-    /* 🔥 NUEVO: Centrar internamente las opciones del Radio Button (Género) */
-    div[role="radiogroup"] {
-        justify-content: center !important;
+    /* 🔥 CORRECCIÓN: Centrado absoluto del Campo de Género (Radio Buttons) */
+    div[data-testid="stRadio"] {
+        width: 100% !important;
+        max-width: 450px !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* Centra el texto de "Selecciona:" y los botones */
     }
-
-    /* 🔥 NUEVO: Contenedor global de botones para centrado absoluto */
-    .stButton {
+    
+    div[role="radiogroup"] {
         display: flex !important;
         justify-content: center !important;
+        width: 100% !important;
+    }
+
+    /* 🔥 CORRECCIÓN: Centrado absoluto de TODOS los Botones */
+    div[data-testid="stButton"] {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
         width: 100% !important;
         margin-top: 15px !important;
     }
 
-    /* Botones: Siguiente, Calcular Destino, Reiniciar */
-    .stButton > button {
-        display: block;
-        margin: 0 auto !important; /* Fuerza el centrado del botón en sí */
+    /* Diseño del botón interno */
+    div[data-testid="stButton"] > button {
+        display: block !important;
+        margin: 0 auto !important; /* Margen automático para forzarlo al medio */
         width: 100% !important;
-        max-width: 280px;
-        height: 3.5em;
-        font-size: 18px;
-        font-weight: bold;
-        border-radius: 50px;
+        max-width: 280px !important;
+        height: 3.5em !important;
+        font-size: 18px !important;
+        font-weight: bold !important;
+        border-radius: 50px !important;
         background-color: #4A90E2 !important;
         color: white !important;
-        border: none;
-        transition: 0.3s;
+        border: none !important;
+        transition: 0.3s !important;
     }
     
-    .stButton > button:hover {
+    div[data-testid="stButton"] > button:hover {
         background-color: #357ABD !important;
-        transform: scale(1.02);
+        transform: scale(1.02) !important;
     }
 
     h1 { text-align: center; color: white !important; padding-bottom: 20px; }
