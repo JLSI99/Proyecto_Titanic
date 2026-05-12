@@ -3,46 +3,52 @@ import pickle
 import pandas as pd
 import time
 
-# 1. Configuración de pantalla
+# 1. Configuración
 st.set_page_config(page_title="Titanic Pipeline", layout="wide")
 
-# 2. CSS Maestro (Corregido para evitar cuadros duplicados)
+# 2. CSS Avanzado para Centrado y Diseño
 st.markdown("""
     <style>
     .stApp { background-color: #0e1117; }
     
-    /* Contenedor Principal Central */
+    /* Centrado de la columna de contenido */
+    [data-testid="stVerticalBlock"] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Caja de la pregunta */
     .main-card {
         background-color: #1e1e1e;
         padding: 40px;
-        border-radius: 20px;
+        border-radius: 25px;
         border: 2px solid #4A90E2;
-        box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+        box-shadow: 0px 15px 35px rgba(0,0,0,0.6);
         text-align: center;
-        margin-top: 20px;
+        width: 100%;
+        margin-bottom: 20px;
     }
 
-    /* Limpiar bordes automáticos de Streamlit */
-    [data-testid="stVerticalBlock"] > div { border: none !important; }
-    
-    h1, h2, h3, p { color: white !important; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    
-    /* Botones Estilo Touch */
+    /* Forzar centrado de botones de Streamlit */
+    .stButton {
+        display: flex;
+        justify-content: center;
+    }
+
     .stButton>button {
-        width: 100%;
+        width: 60% !important; /* Más elegante que el 100% */
         height: 3.5em;
         font-size: 20px;
         font-weight: bold;
         border-radius: 50px;
         background-color: #4A90E2 !important;
         color: white !important;
-        border: none;
         transition: 0.3s;
     }
-    .stButton>button:hover {
-        background-color: #357ABD !important;
-        transform: scale(1.02);
-    }
+    
+    h1, h2, h3 { text-align: center; color: white !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -59,25 +65,26 @@ if 'paso' not in st.session_state:
     st.session_state.datos = {}
 
 # 4. Título
-st.markdown("<h1 style='font-size: 45px;'>🚢 Pipeline de Datos: Predicción Titanic</h1>", unsafe_allow_html=True)
+st.markdown("<h1>🚢 Simulación de Supervivencia: Titanic</h1>", unsafe_allow_html=True)
 
 # 5. Estructura de Columnas
 col_img_1, col_content, col_img_2 = st.columns([1, 2, 1])
 
 with col_img_1:
-    st.image("https://images.unsplash.com/photo-1569389397653-c04fe624e663?w=400", caption="El Puerto de Southampton")
+    # Imagen: El Titanic en el puerto
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Titanic_at_Southampton%2C_England.JPG/400px-Titanic_at_Southampton%2C_England.JPG", caption="Puerto de Southampton, 1912")
 
 with col_img_2:
-    # Imagen de respaldo confiable (Iceberg)
-    st.image("https://images.unsplash.com/photo-1551244072-5d12893278ab?w=400", caption="El Campo de Hielo")
+    # Imagen: Pintura del hundimiento (Representativa)
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/St%C3%B6wer_Titanic.jpg/400px-St%C3%B6wer_Titanic.jpg", caption="Representación del hundimiento")
 
 with col_content:
-    # USAMOS UN DIV HTML PARA EL MARCO AZUL ÚNICO
+    # Contenedor visual
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
     
     if st.session_state.paso == 1:
-        st.subheader("Pregunta 1: ¿Cuál es tu nombre?")
-        nombre = st.text_input("Nombre", label_visibility="collapsed", placeholder="Tu nombre aquí...")
+        st.header("¿Cuál es tu nombre?")
+        nombre = st.text_input("Escribe tu nombre", label_visibility="collapsed", placeholder="Ej. Yosgar")
         if st.button("Siguiente ➡️"):
             if nombre:
                 st.session_state.datos['nombre'] = nombre
@@ -85,37 +92,37 @@ with col_content:
                 st.rerun()
 
     elif st.session_state.paso == 2:
-        st.subheader(f"Hola {st.session_state.datos['nombre']}, ¿en qué clase viajarías?")
-        clase = st.radio("Clase", [1, 2, 3], format_func=lambda x: f"Clase {x} - {'Lujo' if x==1 else 'Económica'}")
+        st.header(f"{st.session_state.datos['nombre']}, ¿En qué clase viajas?")
+        clase = st.selectbox("Clase:", [1, 2, 3], format_func=lambda x: f"Clase {x} - {'Primera' if x==1 else ('Segunda' if x==2 else 'Tercera')}")
         if st.button("Siguiente ➡️"):
             st.session_state.datos['clase'] = clase
             st.session_state.paso += 1
             st.rerun()
 
     elif st.session_state.paso == 3:
-        st.subheader("¿Cuál es tu género?")
-        sexo = st.radio("Género", ["Mujer", "Hombre"])
+        st.header("¿Cuál es tu género?")
+        sexo = st.radio("Género:", ["Mujer", "Hombre"], horizontal=True) # Centrado horizontal
         if st.button("Siguiente ➡️"):
             st.session_state.datos['es_hombre'] = 1 if sexo == "Hombre" else 0
             st.session_state.paso += 1
             st.rerun()
 
     elif st.session_state.paso == 4:
-        st.subheader("¿Qué edad tienes?")
-        edad = st.slider("Edad", 0, 90, 25)
+        st.header("¿Qué edad tienes?")
+        edad = st.slider("Ajusta tu edad:", 0, 95, 25)
         if st.button("Siguiente ➡️"):
             st.session_state.datos['edad'] = edad
             st.session_state.paso += 1
             st.rerun()
 
     elif st.session_state.paso == 5:
-        st.subheader("Configuración Final")
-        col_a, col_b = st.columns(2)
-        with col_a:
-            sib = st.number_input("Hermanos/Esposa", 0, 10, 0)
-        with col_b:
-            parch = st.number_input("Padres/Hijos", 0, 10, 0)
-        fare = st.number_input("Precio Ticket", 0.0, 512.0, 32.0)
+        st.header("Configuración final")
+        c1, c2 = st.columns(2)
+        with c1:
+            sib = st.number_input("Hermanos/Esposa:", 0, 10, 0)
+        with c2:
+            parch = st.number_input("Padres/Hijos:", 0, 10, 0)
+        fare = st.number_input("Precio del Ticket (Libras):", 0.0, 512.0, 32.0)
         
         if st.button("CALCULAR DESTINO 🚢"):
             st.session_state.datos.update({'sib': sib, 'parch': parch, 'fare': fare})
@@ -123,29 +130,28 @@ with col_content:
             st.rerun()
 
     elif st.session_state.paso == 6:
-        with st.status("Procesando datos del pasajero...", expanded=False):
+        with st.status("Ejecutando Pipeline...", expanded=False):
             time.sleep(1)
-            st.write("Estandarizando variables...")
-            time.sleep(1)
-            st.write("Ejecutando Inferencia...")
+            st.write("Estandarizando datos...")
+            time.sleep(0.5)
+            st.write("Consultando Regresión Logística...")
         
         d = st.session_state.datos
-        # Generar predicción
         input_df = pd.DataFrame([[d['clase'], d['edad'], d['sib'], d['parch'], d['fare'], d['es_hombre'], 0, 1]], 
                                  columns=assets['columnas'])
         input_scaled = assets['escalador'].transform(input_df)
         prob = assets['modelo'].predict_proba(input_scaled)[0][1]
         
-        st.markdown(f"<h2>{d['nombre']}, tu probabilidad es:</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h3>{d['nombre']}, tu probabilidad es:</h3>", unsafe_allow_html=True)
         st.markdown(f"<h1 style='font-size: 100px; color: #FFD700;'>{prob*100:.1f}%</h1>", unsafe_allow_html=True)
         
         if prob > 0.5:
             st.balloons()
-            st.success("¡FELICIDADES, SOBREVIVISTE!")
+            st.success("¡SOBREVIVISTE!")
         else:
-            st.error("LAMENTABLEMENTE NO SOBREVIVISTE.")
+            st.error("EL DESTINO NO FUE FAVORABLE.")
         
-        if st.button("Intentar de nuevo 🔄"):
+        if st.button("Reiniciar 🔄"):
             st.session_state.paso = 1
             st.rerun()
 
