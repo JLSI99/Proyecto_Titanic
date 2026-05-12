@@ -9,20 +9,13 @@ import os
 st.set_page_config(page_title="Titanic Simulation", layout="wide")
 
 # ==========================================
-# 2. CSS PERSONALIZADO (Estilo Dark, Moderno y Centrado Absoluto)
+# 2. CSS PERSONALIZADO (Blindado para Centrado Absoluto)
 # ==========================================
 st.markdown("""
     <style>
     .stApp { background-color: #0e1117; }
     
-    /* Centrado de la columna central */
-    [data-testid="stColumn"]:nth-of-type(2) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Estilo para la Caja de la Pregunta (Subheader) */
+    /* 1. Subheader (Caja de Pregunta) */
     .stElementContainer h3 {
         background-color: #1e1e1e !important;
         color: #4A90E2 !important;
@@ -30,52 +23,47 @@ st.markdown("""
         border-radius: 20px !important;
         border: 2px solid #4A90E2 !important;
         text-align: center !important;
-        width: 100% !important;
         box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
         margin-bottom: 20px !important;
+        width: 100% !important;
     }
 
-    /* Centrar estrictamente los contenedores principales de inputs */
-    div[data-testid="stTextInput"], 
-    div[data-testid="stSelectbox"], 
-    div[data-testid="stSlider"], 
-    div[data-testid="stNumberInput"] {
-        width: 100% !important;
-        max-width: 450px !important;
-        margin: 0 auto !important; 
-    }
-
-    /* 🔥 CORRECCIÓN: Centrado absoluto del Campo de Género (Radio Buttons) */
-    div[data-testid="stRadio"] {
-        width: 100% !important;
-        max-width: 450px !important;
-        margin: 0 auto !important;
+    /* 2. Centrar las opciones de Género (Radio Buttons) */
+    .stRadio {
         display: flex !important;
         flex-direction: column !important;
-        align-items: center !important; /* Centra el texto de "Selecciona:" y los botones */
+        align-items: center !important; 
+        width: 100% !important;
     }
     
-    div[role="radiogroup"] {
+    /* Centrar el texto "Selecciona:" del Radio */
+    .stRadio label {
         display: flex !important;
         justify-content: center !important;
+        text-align: center !important;
         width: 100% !important;
     }
 
-    /* 🔥 CORRECCIÓN: Centrado absoluto de TODOS los Botones */
-    div[data-testid="stButton"] {
+    /* Centrar los circulitos de Mujer / Hombre */
+    .stRadio div[role="radiogroup"] {
         display: flex !important;
         justify-content: center !important;
-        align-items: center !important;
         width: 100% !important;
-        margin-top: 15px !important;
+        margin: 0 auto !important;
     }
 
-    /* Diseño del botón interno */
-    div[data-testid="stButton"] > button {
-        display: block !important;
-        margin: 0 auto !important; /* Margen automático para forzarlo al medio */
+    /* 3. Centrar TODOS los Botones (Siguiente, Calcular, Reiniciar) */
+    .stButton {
+        display: flex !important;
+        justify-content: center !important; /* Fuerza el contenedor al centro */
         width: 100% !important;
-        max-width: 280px !important;
+        margin-top: 20px !important;
+    }
+
+    /* Diseño del botón en sí */
+    .stButton button {
+        width: 280px !important;
+        max-width: 100% !important;
         height: 3.5em !important;
         font-size: 18px !important;
         font-weight: bold !important;
@@ -84,13 +72,16 @@ st.markdown("""
         color: white !important;
         border: none !important;
         transition: 0.3s !important;
+        margin: 0 auto !important; /* Margen auto bloquea el elemento en el centro */
+        display: block !important;
     }
     
-    div[data-testid="stButton"] > button:hover {
+    .stButton button:hover {
         background-color: #357ABD !important;
         transform: scale(1.02) !important;
     }
 
+    /* 4. Título Principal */
     h1 { text-align: center; color: white !important; padding-bottom: 20px; }
     
     /* Ajuste para las imágenes */
@@ -206,8 +197,8 @@ with col_centro:
             prob = assets['modelo'].predict_proba(input_scaled)[0][1]
             
             st.subheader(f"Resultado para {d['nombre']}")
-            st.markdown(f"<h1 style='font-size: 80px; color: #FFD700;'>{prob*100:.1f}%</h1>", unsafe_allow_html=True)
-            st.write("### Probabilidad de sobrevivir")
+            st.markdown(f"<h1 style='font-size: 80px; color: #FFD700; text-align: center;'>{prob*100:.1f}%</h1>", unsafe_allow_html=True)
+            st.markdown("<h3 style='text-align: center; border: none !important; box-shadow: none !important; background-color: transparent !important;'>Probabilidad de sobrevivir</h3>", unsafe_allow_html=True)
             
             if prob > 0.5:
                 st.balloons()
