@@ -53,7 +53,7 @@ with col_img_1:
     st.image("https://images.unsplash.com/photo-1500077423678-25eead48513a?w=400", caption="El Puerto de Salida")
 
 with col_img_2:
-    st.image("https://images.unsplash.com/photo-1599427303058-f06cbdf4290e?w=400", caption="El Iceberg")
+    st.image("https://es.pngtree.com/freepng/titanic-clipart-titanic-ship-on-ocean-vector-illustration-cartoon_11067561.html", caption="El Titanic")
 
 # 6. Preguntas secuenciales
 with col_content:
