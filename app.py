@@ -29,7 +29,7 @@ st.markdown("""
         color: white;
     }
     </style>
-""", unsafe_allow_stdio=True)
+""", unsafe_allow_html=True)
 
 # 3. Cargar la "Mochila" (Modelo + Escalador)
 @st.cache_resource
