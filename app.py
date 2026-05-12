@@ -108,8 +108,8 @@ with col_izq:
 
 # --- Columna Derecha ---
 with col_der:
-    if os.path.exists("Titanic.jpg"):
-        st.image("Titanic.jpg", caption="El Destino Final", use_container_width=True)
+    if os.path.exists("Iceberg.jpg"):
+        st.image("Iceberg.jpg", caption="El Destino Final", use_container_width=True)
     else:
         st.info("📷 Sube 'titanic_final.jpg' a tu repo")
 
