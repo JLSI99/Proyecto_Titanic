@@ -126,7 +126,7 @@ with col_content:
         st.divider()
         st.balloons()
         st.markdown(f"## {d['nombre']}, tus probabilidades son:")
-        st.markdown(f"<h1 style='text-align: center; color: #FFD700;'>{prob*100:.2f}%</h1>", unsafe_allow_stdio=True)
+        st.markdown(f"<h1 style='text-align: center; color: #FFD700;'>{prob*100:.2f}%</h1>", unsafe_allow_html=True)
         
         if prob > 0.5:
             st.success("¡SOBREVIVISTE! Te rescató el Carpathia.")
