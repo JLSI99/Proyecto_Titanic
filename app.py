@@ -57,7 +57,7 @@ with col_img_2:
 
 # 6. Preguntas secuenciales
 with col_content:
-    st.markdown("<div class='question-box'>", unsafe_allow_stdio=True)
+    st.markdown("<div class='question-box'>", unsafe_allow_html=True)
     
     if st.session_state.paso == 1:
         st.subheader("Pregunta 1: ¿Cuál es tu nombre?")
@@ -137,4 +137,4 @@ with col_content:
             st.session_state.paso = 1
             st.rerun()
 
-    st.markdown("</div>", unsafe_allow_stdio=True)
+    st.markdown("</div>", unsafe_allow_html=True)
