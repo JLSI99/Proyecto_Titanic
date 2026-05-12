@@ -3,23 +3,26 @@ import pickle
 import pandas as pd
 import os
 
-# 1. Configuración de pantalla
-st.set_page_config(page_title="Titanic Pipeline", layout="wide")
+# ==========================================
+# 1. CONFIGURACIÓN DE PÁGINA
+# ==========================================
+st.set_page_config(page_title="Titanic Simulation", layout="wide")
 
-# 2. CSS Optimizado
+# ==========================================
+# 2. CSS PERSONALIZADO (Estilo Dark & Moderno)
+# ==========================================
 st.markdown("""
     <style>
     .stApp { background-color: #0e1117; }
     
-    /* Centrado exclusivo de la columna central */
-    [data-testid="stColumn"]:nth-of-type(2) > div {
+    /* Centrado de la columna central y sus elementos */
+    [data-testid="stColumn"]:nth-of-type(2) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
     }
 
-    /* Estilo para la Caja de la Pregunta */
+    /* Estilo para la Caja de la Pregunta (Subheader) */
     .stElementContainer h3 {
         background-color: #1e1e1e !important;
         color: #4A90E2 !important;
@@ -29,35 +32,49 @@ st.markdown("""
         text-align: center !important;
         width: 100% !important;
         box-shadow: 0px 10px 25px rgba(0,0,0,0.4);
+        margin-bottom: 20px !important;
     }
 
-    /* Botón Siguiente */
+    /* Botón Siguiente: Grande y centrado */
     .stButton > button {
         display: block;
-        margin: 25px auto !important;
+        margin: 20px auto !important;
         width: 100% !important;
-        max-width: 300px;
+        max-width: 280px;
         height: 3.5em;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
         border-radius: 50px;
         background-color: #4A90E2 !important;
         color: white !important;
         border: none;
-        box-shadow: 0px 8px 15px rgba(74, 144, 226, 0.3);
+        transition: 0.3s;
+    }
+    
+    .stButton > button:hover {
+        background-color: #357ABD !important;
+        transform: scale(1.02);
     }
 
-    /* Ajuste para inputs */
+    /* Inputs y Sliders */
     .stTextInput, .stSelectbox, .stSlider, .stRadio {
         width: 100% !important;
         max-width: 450px;
     }
 
-    h1 { text-align: center; color: white !important; margin-bottom: 40px !important; }
+    h1 { text-align: center; color: white !important; padding-bottom: 20px; }
+    
+    /* Ajuste para las imágenes */
+    [data-testid="stImage"] {
+        border-radius: 15px;
+        overflow: hidden;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. Cargar Activos de IA (con manejo de error para Cloud)
+# ==========================================
+# 3. LÓGICA DE ACTIVOS (Modelo e IA)
+# ==========================================
 @st.cache_resource
 def load_assets():
     file_path = 'modelo_titanic.pkl'
@@ -68,42 +85,52 @@ def load_assets():
 
 assets = load_assets()
 
+# Inicializar estado de la sesión
 if 'paso' not in st.session_state:
     st.session_state.paso = 1
     st.session_state.datos = {}
 
-# 4. Título Principal
+# ==========================================
+# 4. ESTRUCTURA VISUAL (Layout)
+# ==========================================
 st.markdown("<h1>🚢 Simulación de Supervivencia: Titanic</h1>", unsafe_allow_html=True)
 
-# 5. Diseño de 3 Columnas
+# Tres columnas: [Imagen Izq] [Contenido] [Imagen Der]
 col_izq, col_centro, col_der = st.columns([1, 2, 1])
 
+# --- Columna Izquierda ---
 with col_izq:
-    # URL directa de Wikimedia Commons
-    st.image("https://upload.wikimedia.org/wikipedia/commons/a/af/Titanic_at_Southampton%2C_England.JPG", 
-             caption="Southampton, 1912", use_container_width=True)
+    if os.path.exists("titanic_inicio.jpg"):
+        st.image("titanic_inicio.jpg", caption="Southampton, 1912", use_container_width=True)
+    else:
+        # Fallback en caso de que no hayas subido la imagen aún
+        st.info("📷 Sube 'titanic_inicio.jpg' a tu repo")
 
+# --- Columna Derecha ---
 with col_der:
-    # URL directa de Wikimedia Commons
-    st.image("https://upload.wikimedia.org/wikipedia/commons/6/6e/St%C3%B6wer_Titanic.jpg", 
-             caption="Hundimiento (Representación)", use_container_width=True)
+    if os.path.exists("titanic_final.jpg"):
+        st.image("titanic_final.jpg", caption="El Destino Final", use_container_width=True)
+    else:
+        st.info("📷 Sube 'titanic_final.jpg' a tu repo")
 
+# --- Columna Central (Lógica de la App) ---
 with col_centro:
     if assets is None:
-        st.error("Error: No se encontró el archivo 'modelo_titanic.pkl'. Asegúrate de subirlo a tu repositorio de GitHub.")
+        st.error("⚠️ No se encontró 'modelo_titanic.pkl'. Por favor, súbelo al repositorio.")
     else:
-        # Lógica de Navegación
+        # PASO 1: NOMBRE
         if st.session_state.paso == 1:
             st.subheader("¿Cuál es tu nombre?")
-            nombre = st.text_input("Nombre", label_visibility="collapsed", placeholder="Tu nombre...")
+            nombre = st.text_input("Nombre", label_visibility="collapsed", placeholder="Escribe tu nombre aquí...")
             if st.button("Siguiente ➡️"):
                 if nombre:
                     st.session_state.datos['nombre'] = nombre
                     st.session_state.paso += 1
                     st.rerun()
                 else:
-                    st.warning("Por favor, introduce tu nombre.")
+                    st.warning("Necesitamos un nombre para el manifiesto.")
 
+        # PASO 2: CLASE
         elif st.session_state.paso == 2:
             st.subheader(f"Hola {st.session_state.datos['nombre']}, ¿en qué clase viajas?")
             clase = st.selectbox("Clase:", [1, 2, 3], format_func=lambda x: f"Clase {x} - {'Lujo' if x==1 else 'Económica'}")
@@ -112,6 +139,7 @@ with col_centro:
                 st.session_state.paso += 1
                 st.rerun()
 
+        # PASO 3: GÉNERO
         elif st.session_state.paso == 3:
             st.subheader("¿Cuál es tu género?")
             sexo = st.radio("Selecciona:", ["Mujer", "Hombre"], horizontal=True)
@@ -120,6 +148,7 @@ with col_centro:
                 st.session_state.paso += 1
                 st.rerun()
 
+        # PASO 4: EDAD
         elif st.session_state.paso == 4:
             st.subheader("¿Qué edad tienes?")
             edad = st.slider("Edad:", 0, 95, 25)
@@ -128,17 +157,20 @@ with col_centro:
                 st.session_state.paso += 1
                 st.rerun()
 
+        # PASO 5: TARIFA
         elif st.session_state.paso == 5:
             st.subheader("Configuración Final")
-            fare = st.number_input("Precio del Ticket (Libras):", 0.0, 512.0, 32.0)
+            fare = st.number_input("Precio del Ticket (en Libras de 1912):", 0.0, 512.0, 32.0)
             if st.button("CALCULAR DESTINO 🚢"):
                 st.session_state.datos.update({'fare': fare, 'sib': 0, 'parch': 0})
                 st.session_state.paso += 1
                 st.rerun()
 
+        # PASO 6: RESULTADO
         elif st.session_state.paso == 6:
             d = st.session_state.datos
-            # Ajusta los nombres de las columnas según tu modelo
+            
+            # Preparación de datos para el modelo
             input_df = pd.DataFrame([[d['clase'], d['edad'], d['sib'], d['parch'], d['fare'], d['es_hombre'], 0, 1]], 
                                      columns=assets['columnas'])
             
@@ -146,15 +178,16 @@ with col_centro:
             prob = assets['modelo'].predict_proba(input_scaled)[0][1]
             
             st.subheader(f"Resultado para {d['nombre']}")
-            st.markdown(f"<h1 style='font-size: 100px; color: #FFD700;'>{prob*100:.1f}%</h1>", unsafe_allow_html=True)
+            st.markdown(f"<h1 style='font-size: 80px; color: #FFD700;'>{prob*100:.1f}%</h1>", unsafe_allow_html=True)
+            st.write("### Probabilidad de sobrevivir")
             
             if prob > 0.5:
                 st.balloons()
-                st.success("¡FELICIDADES, SOBREVIVISTE!")
+                st.success("✨ ¡SOBREVIVISTE! Lograste llegar a un bote salvavidas.")
             else:
-                st.error("EL DESTINO NO FUE FAVORABLE.")
+                st.error("❄️ EL DESTINO NO FUE FAVORABLE. Te has hundido con el Titanic.")
             
-            if st.button("Reiniciar 🔄"):
+            if st.button("Reiniciar Simulador 🔄"):
                 st.session_state.paso = 1
                 st.session_state.datos = {}
                 st.rerun()
