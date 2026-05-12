@@ -6,19 +6,25 @@ import time
 # 1. Configuración de pantalla ancha
 st.set_page_config(page_title="Titanic Pipeline", layout="wide")
 
-# 2. Estilos CSS para animaciones y diseño táctil
+# 2. Estilos CSS corregidos
 st.markdown("""
     <style>
     @keyframes slideIn {
         from { transform: translateX(-100%); opacity: 0; }
         to { transform: translateX(0); opacity: 1; }
     }
+    /* Estilo para el contenedor de la pregunta */
     .question-box {
         animation: slideIn 0.5s ease-out;
-        padding: 30px;
+        padding: 40px;
         background: #1e1e1e;
         border-radius: 20px;
         border: 2px solid #4A90E2;
+        margin-top: 20px;
+    }
+    /* Ajuste para que los textos de Streamlit hereden el color */
+    .question-box h3, .question-box label {
+        color: white !important;
     }
     .stButton>button {
         width: 100%;
@@ -27,11 +33,12 @@ st.markdown("""
         border-radius: 25px;
         background-color: #4A90E2;
         color: white;
+        margin-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. Cargar la "Mochila" (Modelo + Escalador)
+# 3. Cargar la "Mochila"
 @st.cache_resource
 def load_assets():
     with open('modelo_titanic.pkl', 'rb') as f:
@@ -39,12 +46,11 @@ def load_assets():
 
 assets = load_assets()
 
-# 4. Control de flujo (Estado de la App)
 if 'paso' not in st.session_state:
     st.session_state.paso = 1
     st.session_state.datos = {}
 
-# 5. Diseño: Imágenes laterales y contenido central
+# 5. Diseño: Título e Imágenes
 st.markdown("<h1 style='text-align: center;'>🚢 Pipeline de Datos: Supervivencia Titanic</h1>", unsafe_allow_html=True)
 
 col_img_1, col_content, col_img_2 = st.columns([1, 2, 1])
@@ -53,15 +59,17 @@ with col_img_1:
     st.image("https://images.unsplash.com/photo-1500077423678-25eead48513a?w=400", caption="El Puerto de Salida")
 
 with col_img_2:
-    st.image("https://es.pngtree.com/freepng/titanic-clipart-titanic-ship-on-ocean-vector-illustration-cartoon_11067561.html", caption="El Titanic")
+    # IMAGEN CORREGIDA: Enlace directo a archivo
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/St%C3%B6wer_Titanic.jpg/400px-St%C3%B6wer_Titanic.jpg", caption="El Titanic en alta mar")
 
 # 6. Preguntas secuenciales
 with col_content:
+    # Abrimos el contenedor ANTES de la lógica para que todo viva dentro
     st.markdown("<div class='question-box'>", unsafe_allow_html=True)
     
     if st.session_state.paso == 1:
         st.subheader("Pregunta 1: ¿Cuál es tu nombre?")
-        nombre = st.text_input("Escribe aquí:", placeholder="Tu nombre...")
+        nombre = st.text_input("Escribe aquí:", placeholder="Tu nombre...", label_visibility="collapsed")
         if st.button("Siguiente ➡️"):
             if nombre:
                 st.session_state.datos['nombre'] = nombre
@@ -108,24 +116,18 @@ with col_content:
         st.header("Calculando probabilidades...")
         progreso = st.progress(0)
         for i in range(100):
-            time.sleep(0.02) # Total 2 segundos
+            time.sleep(0.02)
             progreso.progress(i + 1)
         
-        # PROCESO DE IA (Pipeline)
         d = st.session_state.datos
-        # 1. Crear DataFrame
         input_df = pd.DataFrame([[d['clase'], d['edad'], d['sib'], d['parch'], d['fare'], d['es_hombre'], 0, 1]], 
                                  columns=assets['columnas'])
-        
-        # 2. Escalar datos (Traducción)
         input_scaled = assets['escalador'].transform(input_df)
-        
-        # 3. Predicción (Sigmoide)
         prob = assets['modelo'].predict_proba(input_scaled)[0][1]
         
         st.divider()
         st.balloons()
-        st.markdown(f"## {d['nombre']}, tus probabilidades son:")
+        st.markdown(f"<h2 style='text-align: center;'>{d['nombre']}, tus probabilidades son:</h2>", unsafe_allow_html=True)
         st.markdown(f"<h1 style='text-align: center; color: #FFD700;'>{prob*100:.2f}%</h1>", unsafe_allow_html=True)
         
         if prob > 0.5:
