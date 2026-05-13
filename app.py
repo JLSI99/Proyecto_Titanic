@@ -29,12 +29,29 @@ st.markdown("""
     }
 
     /* 2. Centrar las opciones de Género (Radio Buttons) */
-    .stRadio {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important; 
-        width: 100% !important;
-    }
+    /* ==========================================
+.stRadio > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+.stRadio div[role="radiogroup"] {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 40px !important; /* separación entre Mujer y Hombre */
+    width: 100% !important;
+    margin: 0 auto !important;
+}
+
+/* Centrar texto del label */
+.stRadio label {
+    justify-content: center !important;
+    text-align: center !important;
+}
     
     /* Centrar el texto "Selecciona:" del Radio */
     .stRadio label {
