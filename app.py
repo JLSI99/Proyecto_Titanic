@@ -57,7 +57,7 @@ st.markdown("""
         display: flex !important;
         justify-content: center !important; /* Fuerza el contenedor al centro */
         width: 100% !important;
-        margin: 0 auto !important;
+        margin-top: 20px !important;
     }
 
     /* Diseño del botón en sí */
