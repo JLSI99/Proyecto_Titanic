@@ -113,7 +113,7 @@ if 'paso' not in st.session_state:
 # ==========================================
 # 4. ESTRUCTURA VISUAL (Layout)
 # ==========================================
-st.markdown("<h1>🚢 Simulación de Supervivencia: Titanic</h1>", unsafe_allow_html=True)
+st.markdown("<h1>🚢 Simulación de Jani: Titanic</h1>", unsafe_allow_html=True)
 
 # Tres columnas: [Imagen Izq] [Contenido] [Imagen Der]
 col_izq, col_centro, col_der = st.columns([1, 2, 1])
